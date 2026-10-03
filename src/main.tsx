@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { RealIndexer } from "./api";
 import { annualizedRate, fundingCost, payer, rankTickers } from "./funding";
+import { HistoryPanel } from "./HistoryPanel";
 import { demoTickers } from "./mock";
-import type { MarketTicker } from "./types";
+import type { FundingPayment, MarketTicker } from "./types";
 import "./styles.css";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
@@ -14,6 +15,9 @@ function App() {
   const [notional, setNotional] = useState(10_000);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("Connecting to REAL");
+  const [selected, setSelected] = useState<MarketTicker>();
+  const [history, setHistory] = useState<FundingPayment[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   useEffect(() => {
     new RealIndexer().tickers().then((data) => { setTickers(data); setStatus("Live data"); }).catch(() => {
@@ -22,6 +26,7 @@ function App() {
   }, []);
 
   const visible = useMemo(() => rankTickers(tickers).filter((ticker) => ticker.symbol.toLowerCase().includes(query.toLowerCase())), [tickers, query]);
+  const showHistory = (ticker: MarketTicker) => { setSelected(ticker); setHistory([]); setHistoryLoading(true); new RealIndexer().fundingPayments(ticker.market_id).then(setHistory).catch(() => setHistory([])).finally(() => setHistoryLoading(false)); };
 
   return <><a className="skip-link" href="#main-content">Skip to content</a><main id="main-content">
     <header><div><span className="eyebrow">REAL COMMUNITY TOOLS</span><h1>Funding Radar</h1><p>See crowded markets before the next funding settlement.</p></div><span className="status" aria-live="polite">● {status}</span></header>
@@ -33,9 +38,9 @@ function App() {
         <div><small>Next funding</small><strong>{percent.format(rate)}</strong></div>
         <div><small>Annualized estimate</small><strong>{percent.format(annualizedRate(rate))}</strong></div>
         <div><small>Position impact</small><strong>{money.format(Math.abs(fundingCost(notional, rate)))}</strong></div>
-        <div><small>24h turnover</small><strong>{money.format(Number(ticker.turnover_24h))}</strong></div>
+        <div><small>24h turnover</small><strong>{money.format(Number(ticker.turnover_24h))}</strong></div><button className="history-button" onClick={() => showHistory(ticker)}>History</button>
       </article>;
-    })}</section>
+    })}</section>{selected && <HistoryPanel ticker={selected} payments={history} loading={historyLoading} onClose={() => setSelected(undefined)}/>} 
   </main></>;
 }
 
