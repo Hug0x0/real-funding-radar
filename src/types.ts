@@ -6,6 +6,7 @@ export type MarketTicker = {
   open_interest?: string | null;
   open_interest_value?: string | null;
   volume_24h: string;
+  turnover_24h: string;
   perp_next_funding_rate?: string | null;
   perp_next_funding_time_ms?: number | null;
 };
