@@ -24,3 +24,13 @@ export function averageRate(payments: FundingPayment[]): number {
   const rates = payments.flatMap((payment) => payment.rate == null ? [] : [Number(payment.rate)]);
   return rates.length ? rates.reduce((sum, rate) => sum + rate, 0) / rates.length : 0;
 }
+
+export function historicalRates(payments: FundingPayment[]): { time: number; rate: number }[] {
+  const unique = new Map<string, { time: number; rate: number }>();
+  for (const payment of payments) {
+    if (payment.rate == null) continue;
+    const point = { time: payment.updated_at_ms, rate: Number(payment.rate) };
+    unique.set(`${point.time}:${point.rate}`, point);
+  }
+  return [...unique.values()].sort((a, b) => b.time - a.time);
+}
