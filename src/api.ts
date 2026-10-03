@@ -13,12 +13,12 @@ export class RealIndexer {
   }
 
   async tickers(): Promise<MarketTicker[]> {
-    const response = await this.get<ApiList<MarketTicker> | MarketTicker[]>("/api/v1/markets/tickers");
+    const response = await this.get<ApiList<MarketTicker> | MarketTicker[]>("/api/v1/markets/tickers?p[s]=100");
     return Array.isArray(response) ? response : response.data;
   }
 
   async fundingPayments(marketId: string): Promise<FundingPayment[]> {
-    const query = new URLSearchParams({ "f[market_ids]": marketId, limit: "100" });
+    const query = new URLSearchParams({ "f[market_ids]": marketId, "p[s]": "100" });
     const response = await this.get<ApiList<FundingPayment>>(`/api/v1/funding-payments?${query}`);
     return response.data;
   }
