@@ -33,7 +33,7 @@ function App() {
         <div><small>Next funding</small><strong>{percent.format(rate)}</strong></div>
         <div><small>Annualized estimate</small><strong>{percent.format(annualizedRate(rate))}</strong></div>
         <div><small>Position impact</small><strong>{money.format(Math.abs(fundingCost(notional, rate)))}</strong></div>
-        <div><small>24h volume</small><strong>{money.format(Number(ticker.volume_24h))}</strong></div>
+        <div><small>24h turnover</small><strong>{money.format(Number(ticker.turnover_24h))}</strong></div>
       </article>;
     })}</section>
   </main></>;
