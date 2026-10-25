@@ -30,6 +30,7 @@ export function historicalRates(payments: FundingPayment[]): { time: number; rat
   for (const payment of payments) {
     if (payment.rate == null) continue;
     const point = { time: payment.updated_at_ms, rate: Number(payment.rate) };
+    if (!Number.isFinite(point.rate) || !Number.isFinite(point.time) || !Number.isFinite(new Date(point.time).getTime())) continue;
     unique.set(`${point.time}:${point.rate}`, point);
   }
   return [...unique.values()].sort((a, b) => b.time - a.time);
