@@ -42,7 +42,7 @@ function App() {
 
   return <><a className="skip-link" href="#main-content">Skip to content</a><main id="main-content">
     <header><div><span className="eyebrow">REAL COMMUNITY TOOLS</span><h1>Funding Radar</h1><p>See crowded markets before the next funding settlement.</p></div><span className="status" aria-live="polite">● {status}</span></header>
-    <section className="controls"><label>Search market<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="BTC, ETH, SOL, HYPE" /></label><label>Position notional<input type="number" min="0" step="100" value={notional} onChange={(event) => setNotional(Number(event.target.value))} /></label></section>
+    <section className="controls"><label>Search market<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by symbol" /></label><label>Position notional<input type="number" min="0" step="100" value={notional} onChange={(event) => setNotional(Number(event.target.value))} /></label></section>
     <section className="grid">{visible.map((ticker, index) => {
       const rate = Number(ticker.perp_next_funding_rate || 0);
       return <article key={ticker.market_id} className={rate < 0 ? "negative" : "positive"}>
