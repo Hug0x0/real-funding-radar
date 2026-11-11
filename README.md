@@ -12,6 +12,15 @@ A lightweight community dashboard for REAL perpetual markets, built with React a
 
 ---
 
+![Funding Radar showing live REAL markets ranked by next funding rate](assets/funding-radar.png)
+
+<details>
+<summary>Funding history view</summary>
+
+![Funding-rate history chart for XRP-USDT](assets/funding-history.png)
+
+</details>
+
 ## At a glance
 
 | Feature | What you can do |
