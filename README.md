@@ -21,7 +21,9 @@ A lightweight community dashboard for REAL perpetual markets, built with React a
 | Position calculator | Enter a position notional and estimate the next funding payment. |
 | Funding history | Explore a funding-rate chart with pointer and keyboard inspection, plus 12 recent observations. |
 | Market context | See 24-hour turnover and a simple annualized rate estimate. |
-| Demo fallback | Explore sample BTC, ETH, SOL, and HYPE markets when the ticker request fails. |
+| Demo fallback | Explore sample BTC, ETH, SOL, HYPE, XRP, and XAUT markets when the ticker request fails. |
+
+Live markets are discovered from the indexer on page load; no fixed allowlist is used. Reload the page to pick up newly listed markets. The demo fallback contains static sample data.
 
 No wallet connection or trading functionality is included. This is an early-stage, read-only dashboard.
 
