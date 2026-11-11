@@ -47,7 +47,7 @@ npm ci
 npm run dev -- --host 127.0.0.1
 ```
 
-Open the local URL printed by Vite, usually **http://127.0.0.1:5173/**. While the repository is private, cloning requires access.
+Open the local URL printed by Vite, usually **http://127.0.0.1:5173/**.
 
 ### Configuration
 
@@ -112,6 +112,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, validation, and pull request g
 
 ## Project status & license
 
-This repository does not yet include a license. A license must be selected and added before it is presented as open source; public visibility alone does not grant open-source reuse rights.
+Copyright (c) 2026 Hug0x0. Released under the [MIT License](LICENSE). You may use, modify, and redistribute this software, including commercially, provided you retain the copyright and permission notices. The software is provided without warranty.
 
 REAL Funding Radar is community-built and is not affiliated with Real Markets. Estimates are informational and are not investment advice.

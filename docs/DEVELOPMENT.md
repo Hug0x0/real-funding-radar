@@ -68,7 +68,6 @@ The preview server is for local verification. Production hosting must serve the 
 
 ## Before a public release
 
-- Select and add a license reflecting the maintainer's intended reuse terms.
 - Review tracked files and Git history for credentials or private information.
 - Validate the indexer response format and settlement interval assumptions.
 - Run tests and the production build, then verify live and fallback behavior in a browser.

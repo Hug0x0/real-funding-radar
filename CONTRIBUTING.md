@@ -32,4 +32,4 @@ The GitHub Actions workflow runs installation, tests, and the production build o
 
 ## Licensing status
 
-A project license has not yet been selected. Resolve the intended licensing terms with the maintainer before submitting code for redistribution under an open-source license.
+This project is licensed under the [MIT License](LICENSE). By submitting a contribution, you agree that it is released under the same license.
