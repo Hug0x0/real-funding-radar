@@ -9,6 +9,7 @@ import "./styles.css";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 const percent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 6 });
+const annualPercent = new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const clock = new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 const REFRESH_MS = 60_000;
 
@@ -61,7 +62,7 @@ function App() {
       return <article key={ticker.market_id} className={rate < 0 ? "negative" : "positive"}>
         <div className="rank">#{index + 1}</div><div className="market"><h2>{ticker.symbol}</h2><span>{payer(rate)}</span></div>
         <div><small>Next funding</small><strong>{percent.format(rate)}</strong></div>
-        <div><small>Annualized estimate</small><strong>{percent.format(annualizedRate(rate))}</strong></div>
+        <div><small>Annualized estimate</small><strong>{annualPercent.format(annualizedRate(rate))}</strong></div>
         <div><small>Position impact</small><strong>{money.format(Math.abs(fundingCost(notional, rate)))}</strong></div>
         <div><small>24h turnover</small><strong>{money.format(Number(ticker.turnover_24h))}</strong></div><button className="history-button" onClick={() => showHistory(ticker)}>History</button>
       </article>;
