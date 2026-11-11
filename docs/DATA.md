@@ -79,6 +79,6 @@ This is a list of rate observations, not a personal payment ledger. Account IDs,
 
 ## Freshness and fallback behavior
 
-Tickers load when the app mounts; there is no scheduled refresh. A failed ticker request loads fixed sample markets from `src/mock.ts` and displays **Demo data — API unavailable**. A successful request displays **Live data**, even as the fetched snapshot ages.
+Tickers load when the app mounts and are polled every 60 seconds. The header shows the local time of the last successful refresh. If the first ticker request fails, the app loads fixed sample markets from `src/mock.ts` and displays **Demo data — API unavailable**. If a later refresh fails after live data loaded, the last live values stay on screen and the status reads **Live data — last refresh failed**.
 
 History is requested on each selection, including for demo markets. A failed history request displays a separate error message; selecting History again retries it. Stale responses are ignored after another market is selected or the panel is closed. There is no history pagination, automatic retry policy, or request cancellation.

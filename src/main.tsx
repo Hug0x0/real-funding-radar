@@ -9,6 +9,8 @@ import "./styles.css";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 const percent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 6 });
+const clock = new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+const REFRESH_MS = 60_000;
 
 function App() {
   const [tickers, setTickers] = useState<MarketTicker[]>([]);
@@ -19,12 +21,23 @@ function App() {
   const [history, setHistory] = useState<FundingPayment[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState(false);
+  const [updatedAt, setUpdatedAt] = useState<number>();
   const historyRequest = useRef(0);
 
   useEffect(() => {
-    new RealIndexer().tickers().then((data) => { setTickers(data); setStatus("Live data"); }).catch(() => {
+    let active = true;
+    let live = false;
+    const load = () => new RealIndexer().tickers().then((data) => {
+      if (!active) return;
+      live = true; setTickers(data); setStatus("Live data"); setUpdatedAt(Date.now());
+    }).catch(() => {
+      if (!active) return;
+      if (live) { setStatus("Live data — last refresh failed"); return; }
       setTickers(demoTickers); setStatus("Demo data — API unavailable");
     });
+    load();
+    const timer = window.setInterval(load, REFRESH_MS);
+    return () => { active = false; window.clearInterval(timer); };
   }, []);
 
   const visible = useMemo(() => rankTickers(tickers).filter((ticker) => ticker.symbol.toLowerCase().includes(query.toLowerCase())), [tickers, query]);
@@ -41,8 +54,8 @@ function App() {
   };
 
   return <><a className="skip-link" href="#main-content">Skip to content</a><main id="main-content">
-    <header><div><span className="eyebrow">REAL COMMUNITY TOOLS</span><h1>Funding Radar</h1><p>See crowded markets before the next funding settlement.</p></div><span className="status" aria-live="polite">● {status}</span></header>
-    <section className="controls"><label>Search market<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by symbol" /></label><label>Position notional<input type="number" min="0" step="100" value={notional} onChange={(event) => setNotional(Number(event.target.value))} /></label></section>
+    <header><div><span className="eyebrow">REAL COMMUNITY TOOLS</span><h1>Funding Radar</h1><p>See crowded markets before the next funding settlement.</p></div><span className="status" aria-live="polite">● {status}{updatedAt && <small>Updated {clock.format(updatedAt)} · refreshes every minute</small>}</span></header>
+    <section className="controls"><label>Search market<input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by symbol" /></label><label>Position notional<input type="number" min="0" step="100" value={notional} onChange={(event) => setNotional(Math.max(0, Number(event.target.value) || 0))} /></label></section>
     <section className="grid">{visible.map((ticker, index) => {
       const rate = Number(ticker.perp_next_funding_rate || 0);
       return <article key={ticker.market_id} className={rate < 0 ? "negative" : "positive"}>

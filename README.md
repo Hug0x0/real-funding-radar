@@ -23,13 +23,13 @@ A lightweight community dashboard for REAL perpetual markets, built with React a
 | Market context | See 24-hour turnover and a simple annualized rate estimate. |
 | Demo fallback | Explore sample BTC, ETH, SOL, HYPE, XRP, and XAUT markets when the ticker request fails. |
 
-Live markets are discovered from the indexer on page load; no fixed allowlist is used. Reload the page to pick up newly listed markets. The demo fallback contains static sample data.
+Live markets are discovered from the indexer on page load and every minute after; no fixed allowlist is used, so newly listed markets appear automatically. The demo fallback contains static sample data.
 
 No wallet connection or trading functionality is included. This is an early-stage, read-only dashboard.
 
 ## Getting started
 
-Use **Node.js 24.x** and npm. `.nvmrc` pins Node.js 24.22.1 for local development; CI currently uses Node.js 22.23.4.
+Use **Node.js 24.x** and npm. `.nvmrc` pins Node.js 24.22.1 for local development and CI.
 
 ```bash
 git clone https://github.com/Hug0x0/real-funding-radar.git
@@ -58,7 +58,7 @@ Restart Vite after changing configuration. `VITE_` variables are embedded in the
 
 ## How it works
 
-1. The dashboard requests market tickers on page load.
+1. The dashboard requests market tickers on page load, then every minute.
 2. Markets are sorted by the absolute value of their next funding rate, largest first.
 3. Your position notional is applied to each market's rate to estimate its next payment.
 4. Selecting **History** requests that market's funding-payment records and displays recent rate observations.
@@ -81,7 +81,7 @@ GitHub Actions runs dependency installation, tests, and the production build on 
 
 ## Current limitations
 
-- Rates are fetched on page load; there is no polling or live subscription. The **Live data** label identifies API-sourced data, not a continuously refreshed feed.
+- Tickers are refreshed every minute by polling; there is no live subscription. The header shows the time of the last successful refresh. If a refresh fails after live data loaded, the last live values stay on screen and the status says so.
 - Annualization assumes hourly funding and a constant rate, without compounding. It is a scenario estimate, not a forecast or guaranteed return.
 - Ticker and history requests each ask for up to 100 records. Pagination is not implemented.
 - The chart plots distinct timestamp/rate pairs from the returned records; the detail list shows up to 12. Neither guarantees complete settlement history.
@@ -95,7 +95,6 @@ The following items are planned, not implemented:
 
 - Funding comparisons over 1 day, 7 days, and 30 days.
 - More complete historical coverage through pagination.
-- Data freshness indicators.
 - Validation of funding interval assumptions against the configured indexer.
 
 ## Contributing
